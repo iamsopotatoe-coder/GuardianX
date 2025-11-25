@@ -1,0 +1,145 @@
+<Window x:Class="SecureTaskManager.Views.TutorialWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Welcome to GuardianX" Height="650" Width="880"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Background="#F5F7FA" Icon="/guardianx.ico">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Padding="36,28">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#0F172A" Offset="0"/>
+                    <GradientStop Color="#1E293B" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/guardianx.ico" Width="52" Height="52" Margin="0,0,18,0"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="GuardianX" FontSize="28" FontWeight="SemiBold" 
+                              FontFamily="Segoe UI" Foreground="White"/>
+                    <TextBlock Text="Task Manager" FontSize="13" 
+                              FontFamily="Segoe UI" Foreground="#94A3B8" Margin="0,4,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="36,24">
+            <StackPanel>
+                <Border Background="White" CornerRadius="8" Padding="24" Margin="0,0,0,16" 
+                       BorderBrush="#E2E8F0" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Process Monitoring" FontSize="17" FontWeight="SemiBold" 
+                                  FontFamily="Segoe UI" Foreground="#0F172A" Margin="0,0,0,12"/>
+                        <TextBlock TextWrapping="Wrap" Foreground="#475569" LineHeight="24" FontSize="13" FontFamily="Segoe UI">
+                            GuardianX monitors all running processes and checks them for potential security issues. 
+                            Processes are color-coded based on their risk level.
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8" Padding="24" Margin="0,0,0,16" 
+                       BorderBrush="#E2E8F0" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Risk Levels" FontSize="17" FontWeight="SemiBold" 
+                                  FontFamily="Segoe UI" Foreground="#0F172A" Margin="0,0,0,12"/>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,6">
+                                <Border Background="#DC2626" Padding="8,4" CornerRadius="4" Margin="0,0,16,0" MinWidth="90">
+                                    <TextBlock Text="High Risk" FontWeight="Bold" FontSize="11" Foreground="White" HorizontalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Unsigned or hidden processes with elevated privileges" 
+                                          Foreground="#64748B" VerticalAlignment="Center" FontSize="13" TextWrapping="Wrap" MaxWidth="600"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,6">
+                                <Border Background="#F59E0B" Padding="8,4" CornerRadius="4" Margin="0,0,16,0" MinWidth="90">
+                                    <TextBlock Text="Medium Risk" FontWeight="Bold" FontSize="11" Foreground="White" HorizontalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Suspicious behavior or unsigned executables" 
+                                          Foreground="#64748B" VerticalAlignment="Center" FontSize="13" TextWrapping="Wrap" MaxWidth="600"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,6">
+                                <Border Background="#FBBF24" Padding="8,4" CornerRadius="4" Margin="0,0,16,0" MinWidth="90">
+                                    <TextBlock Text="Low Risk" FontWeight="Bold" FontSize="11" Foreground="#1E293B" HorizontalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Minor concerns or unusual locations" 
+                                          Foreground="#64748B" VerticalAlignment="Center" FontSize="13" TextWrapping="Wrap" MaxWidth="600"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8" Padding="24" Margin="0,0,0,16" 
+                       BorderBrush="#E2E8F0" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Using GuardianX" FontSize="17" FontWeight="SemiBold" 
+                                  FontFamily="Segoe UI" Foreground="#0F172A" Margin="0,0,0,12"/>
+                        <TextBlock TextWrapping="Wrap" Foreground="#475569" LineHeight="24" FontSize="13" FontFamily="Segoe UI">
+                            Right-click any process to view details, end it, or search online.<LineBreak/>
+                            Double-click to see full process information.<LineBreak/>
+                            Use the Startup tab to manage programs that run at boot.<LineBreak/>
+                            The Network tab shows active connections.
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="8" Padding="24" 
+                       BorderBrush="#E2E8F0" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Administrator Access" FontSize="17" FontWeight="SemiBold" 
+                                  FontFamily="Segoe UI" Foreground="#0F172A" Margin="0,0,0,12"/>
+                        <TextBlock TextWrapping="Wrap" Foreground="#475569" LineHeight="24" FontSize="13" FontFamily="Segoe UI">
+                            GuardianX needs administrator privileges to monitor all processes and end system processes. 
+                            Run as administrator for full access.
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="White" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="36,18">
+            <Grid>
+                <CheckBox x:Name="DontShowAgainCheckbox" Content="Don't show this tutorial again" 
+                         VerticalAlignment="Center" Foreground="#64748B" FontSize="13" FontFamily="Segoe UI"/>
+                <Button Content="Get Started" HorizontalAlignment="Right" Padding="32,11" 
+                       Click="GetStarted_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#2563EB"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="FontFamily" Value="Segoe UI"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                               CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#1D4ED8"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Background" Value="#1E40AF"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
