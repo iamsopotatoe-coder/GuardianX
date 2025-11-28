@@ -1,0 +1,474 @@
+<Window x:Class="SecureTaskManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GuardianX Task Manager" Height="900" Width="1600"
+        Icon="guardianx.ico"
+        Background="#0F172A" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="#0F172A"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1E293B"/>
+                    <Setter Property="Foreground" Value="#E2E8F0"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#3B82F6"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderBrush" Value="#60A5FA"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="2,0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RiskLevel}" Value="Red">
+                    <Setter Property="Background" Value="#7F1D1D"/>
+                    <Setter Property="Foreground" Value="#FECACA"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding RiskLevel}" Value="Orange">
+                    <Setter Property="Background" Value="#78350F"/>
+                    <Setter Property="Foreground" Value="#FDE68A"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding RiskLevel}" Value="Yellow">
+                    <Setter Property="Background" Value="#713F12"/>
+                    <Setter Property="Foreground" Value="#FEF08A"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="#020617"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="BorderBrush" Value="#1E293B"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="AlternatingRowBackground" Value="#0F172A"/>
+            <Setter Property="RowBackground" Value="#020617"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="RowHeight" Value="20"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+            <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+            <Setter Property="EnableRowVirtualization" Value="True"/>
+            <Setter Property="EnableColumnVirtualization" Value="True"/>
+            <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#0F172A"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="#0F172A"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" Background="Transparent" 
+                                BorderBrush="#334155" BorderThickness="0,0,0,2" 
+                                Padding="12,6" Margin="0,0,2,0">
+                            <ContentPresenter ContentSource="Header"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#3B82F6"/>
+                                <Setter Property="Foreground" Value="#3B82F6"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter Property="Foreground" Value="#94A3B8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,11"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                               CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1D4ED8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#1E40AF"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CBD5E1"/>
+                                <Setter Property="Foreground" Value="#94A3B8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#475569"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="Padding" Value="20,11"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                               BorderBrush="{TemplateBinding BorderBrush}"
+                               BorderThickness="{TemplateBinding BorderThickness}"
+                               CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F8FAFC"/>
+                                <Setter Property="BorderBrush" Value="#94A3B8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#F1F5F9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#212529"/>
+            <Setter Property="BorderBrush" Value="#CED4DA"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#212529"/>
+        </Style>
+
+        <Style TargetType="MenuItem">
+            <Setter Property="Padding" Value="10,5"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="24,16">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#0F172A" Offset="0"/>
+                    <GradientStop Color="#1E293B" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Image Source="guardianx.ico" Width="36" Height="36" Margin="0,0,14,0"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="GuardianX" FontSize="19" FontWeight="SemiBold" 
+                                  FontFamily="Segoe UI" Foreground="White" Margin="0,0,0,2"/>
+                        <TextBlock Text="Task Manager" FontSize="11" 
+                                  FontFamily="Segoe UI" Foreground="#94A3B8"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="Search:" VerticalAlignment="Center" Margin="0,0,12,0" 
+                              Foreground="#CBD5E1" FontWeight="Medium" FontSize="13"/>
+                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                            Width="320" Height="38" VerticalContentAlignment="Center"
+                            Background="White" Foreground="#1E293B" BorderBrush="#CBD5E1"
+                            BorderThickness="1" Padding="12,0" FontSize="13"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Background="#1E293B" BorderBrush="#334155" BorderThickness="0,0,0,1" Padding="12,8">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Refresh" Command="{Binding RefreshCommand}" Margin="0,0,8,0"/>
+                <Button Content="Export CSV" Style="{StaticResource SecondaryButton}" Command="{Binding ExportCommand}"/>
+            </StackPanel>
+        </Border>
+
+        <TabControl Grid.Row="2" Margin="0" x:Name="MainTabControl" Background="#0F172A">
+            <TabItem Header="PROCESSES" x:Name="ProcessesTab">
+                <Grid Margin="12,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#1E293B" BorderBrush="#334155" 
+                           BorderThickness="1" Padding="8" Margin="0,0,0,8" CornerRadius="4">
+                        <StackPanel>
+                            <TextBlock Text="RISK LEVELS" FontWeight="Bold" FontSize="11" 
+                                      Foreground="#94A3B8" Margin="0,0,0,6" FontFamily="Consolas"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#7F1D1D" Padding="8,2" Margin="0,0,8,0" CornerRadius="2">
+                                    <TextBlock Text="HIGH" Foreground="#FECACA" FontSize="10" FontWeight="Bold" FontFamily="Consolas"/>
+                                </Border>
+                                <Border Background="#78350F" Padding="8,2" Margin="0,0,8,0" CornerRadius="2">
+                                    <TextBlock Text="MED" Foreground="#FDE68A" FontSize="10" FontWeight="Bold" FontFamily="Consolas"/>
+                                </Border>
+                                <Border Background="#713F12" Padding="8,2" Margin="0,0,8,0" CornerRadius="2">
+                                    <TextBlock Text="LOW" Foreground="#FEF08A" FontSize="10" FontWeight="Bold" FontFamily="Consolas"/>
+                                </Border>
+                                <Border BorderBrush="#334155" BorderThickness="1,0,0,0" Margin="8,0,0,0" Padding="8,0,0,0">
+                                    <TextBlock Text="U=Unsigned H=Hidden S=Startup R=Rootkit NET=Internet" Foreground="#64748B" 
+                                              FontSize="10" VerticalAlignment="Center" FontFamily="Consolas"/>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Processes}" SelectedItem="{Binding SelectedProcess}"
+                             MouseDoubleClick="DataGrid_MouseDoubleClick" x:Name="ProcessDataGrid">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Properties" Command="{Binding ShowPropertiesCommand}"/>
+                                <MenuItem Header="Expand Process Tree" Command="{Binding ToggleProcessTreeCommand}"/>
+                                <MenuItem Header="Go to Startup" Command="{Binding GoToStartupCommand}"/>
+                                <Separator/>
+                                <MenuItem Header="Search Online" Command="{Binding SearchOnlineCommand}"/>
+                                <MenuItem Header="End Process" Command="{Binding EndProcessCommand}"/>
+                                <MenuItem Header="End Process Tree" Command="{Binding EndProcessTreeCommand}"/>
+                                <Separator/>
+                                <MenuItem Header="Show File Location" Command="{Binding ShowFileLocationCommand}"/>
+                                <MenuItem Header="Delete Application" Command="{Binding DeleteApplicationCommand}"/>
+                                <Separator/>
+                                <MenuItem Header="Add to Whitelist" Command="{Binding AddToWhitelistCommand}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="DetailsVisibility" Value="{Binding IsExpanded, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                <Setter Property="Background" Value="#0F172A"/>
+                                <Setter Property="Foreground" Value="#94A3B8"/>
+                                <Setter Property="Height" Value="20"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1E293B"/>
+                                        <Setter Property="Foreground" Value="#E2E8F0"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#3B82F6"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <Border Background="#0F172A" BorderBrush="#334155" BorderThickness="1,0,1,1" 
+                                       Margin="35,0,4,4" Padding="8">
+                                    <StackPanel>
+                                        <TextBlock Text="Process Tree:" FontWeight="Bold" Margin="0,0,0,4" Foreground="#94A3B8" FontSize="11"/>
+                                        <TextBlock Text="{Binding ProcessTree}" FontFamily="Consolas" 
+                                                 FontSize="10" TextWrapping="Wrap" Foreground="#E2E8F0"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" Width="24">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding Icon}" Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="FLAGS" Binding="{Binding SecurityIcons}" Width="60"/>
+                            <DataGridTemplateColumn Header="REPUTATION" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ProgressBar Value="{Binding ReputationScore}" Minimum="0" Maximum="100" Height="10" Width="80"
+                                                   Foreground="{Binding RiskLevel, Converter={StaticResource RiskToColorConverter}}"
+                                                   ToolTip="{Binding ReputationScore, StringFormat='Reputation Score: {0}/100'}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="PROCESS NAME" Binding="{Binding ProcessName}" Width="200"/>
+                            <DataGridTextColumn Header="PID" Binding="{Binding ProcessId}" Width="60"/>
+                            <DataGridTextColumn Header="MEM" Binding="{Binding MemoryUsageMB}" Width="80"/>
+                            <DataGridTextColumn Header="COMPANY" Binding="{Binding CompanyName}" Width="180"/>
+                            <DataGridTextColumn Header="PATH" Binding="{Binding FilePath}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Startup" x:Name="StartupTab">
+                <Grid Margin="24,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Programs that run automatically at Windows startup" 
+                              FontSize="12" Margin="0,0,0,12" Foreground="#6C757D"/>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding StartupItems}" x:Name="StartupDataGrid" 
+                             SelectedItem="{Binding SelectedStartupItem}">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Disable" Command="{Binding DisableStartupCommand}" 
+                                         CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                <MenuItem Header="Delete" Command="{Binding DeleteStartupCommand}" 
+                                         CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                <Separator/>
+                                <MenuItem Header="Show File Location" Command="{Binding ShowStartupFileLocationCommand}" 
+                                         CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="240"/>
+                            <DataGridTextColumn Header="Publisher" Binding="{Binding Publisher}" Width="280"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding StartupType}" Width="160"/>
+                            <DataGridTextColumn Header="Signed" Binding="{Binding SignedStatus}" Width="90"/>
+                            <DataGridTextColumn Header="Risk" Binding="{Binding RiskLevel}" Width="90">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding RiskLevel, Converter={StaticResource RiskToColorConverter}}"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Network" x:Name="NetworkTab">
+                <Grid Margin="24,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Active network connections and listening ports" 
+                              FontSize="12" Margin="0,0,0,12" Foreground="#6C757D"/>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding NetworkConnections}" x:Name="NetworkDataGrid"
+                             SelectedItem="{Binding SelectedNetworkConnection}">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Terminate Connection" Command="{Binding TerminateConnectionCommand}" 
+                                         CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSuspicious}" Value="True">
+                                        <Setter Property="Background" Value="#FFEBEE"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="⚠" Binding="{Binding ThreatIndicator}" Width="35"/>
+                            <DataGridTextColumn Header="Process" Binding="{Binding ProcessName}" Width="180"/>
+                            <DataGridTextColumn Header="PID" Binding="{Binding ProcessId}" Width="70"/>
+                            <DataGridTextColumn Header="Protocol" Binding="{Binding Protocol}" Width="80"/>
+                            <DataGridTextColumn Header="Local Address" Binding="{Binding LocalAddress}" Width="150"/>
+                            <DataGridTextColumn Header="Local Port" Binding="{Binding LocalPort}" Width="100"/>
+                            <DataGridTextColumn Header="Remote Address" Binding="{Binding RemoteAddress}" Width="150"/>
+                            <DataGridTextColumn Header="Remote Port" Binding="{Binding RemotePort}" Width="100"/>
+                            <DataGridTextColumn Header="State" Binding="{Binding State}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Properties" x:Name="PropertiesTab" Visibility="Collapsed">
+                <Grid Margin="24,20">
+                    <StackPanel>
+                        <Button Content="← Back to Processes" Command="{Binding BackToProcessesCommand}" 
+                               HorizontalAlignment="Left" Margin="0,0,0,16" Padding="12,6"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <Border Background="White" BorderBrush="#DEE2E6" BorderThickness="1" 
+                                       Padding="16" Margin="0,0,0,16" CornerRadius="4">
+                                    <StackPanel>
+                                        <TextBlock Text="Process Properties" FontSize="16" FontWeight="SemiBold" 
+                                                 Margin="0,0,0,16" Foreground="#0D6EFD"/>
+                                        <TextBlock Text="{Binding DetailedInfo}" FontFamily="Consolas" 
+                                                 FontSize="12" TextWrapping="Wrap" Foreground="#495057"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Background="White" BorderBrush="#DEE2E6" BorderThickness="1" 
+                                       Padding="16" CornerRadius="4">
+                                    <StackPanel>
+                                        <TextBlock Text="Startup Information" FontSize="16" FontWeight="SemiBold" 
+                                                 Margin="0,0,0,16" Foreground="#0D6EFD"/>
+                                        <TextBlock Text="{Binding StartupInfo}" FontFamily="Consolas" 
+                                                 FontSize="12" TextWrapping="Wrap" Foreground="#495057"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Row="3" Background="#0F172A" BorderBrush="#1E293B" BorderThickness="0,1,0,0" Padding="24,12">
+            <Grid>
+                <TextBlock Text="{Binding StatusText}" Foreground="#94A3B8" FontSize="12" FontFamily="Segoe UI"/>
+                <TextBlock Text="GuardianX © 2025" 
+                          Foreground="#64748B" FontSize="11" FontFamily="Segoe UI" HorizontalAlignment="Right"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
